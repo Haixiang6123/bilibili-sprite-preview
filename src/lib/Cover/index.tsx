@@ -1,4 +1,6 @@
 import * as React from 'react'
+import classNames from 'classnames'
+import {useState} from 'react'
 import './styles.scss'
 
 interface Props {
@@ -8,26 +10,36 @@ interface Props {
 }
 
 const Cover: React.FC<Props> = (props) => {
-  const {children, previewSprite} = props;
+  const {children, width, height, previewSprite} = props;
 
-  // 预览图片的样式
+  const [hover, setHover] = useState<boolean>(false);
+
+  const baseStyle = {
+    width,
+    height,
+  }
+
   const previewImgStyle = {
-    height: 127,
-    width: 203,
+    ...baseStyle,
     backgroundImage: `url("${previewSprite}")`,
     backgroundPosition: '0px 0px',
     backgroundSize: 2030,
   }
 
   return (
-    <div>
-      <div className="cover">
-        <div>header</div>
+    <div className="cover" onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)}>
+      <div className="front">
+        {/* Header progress bar*/}
+        <div className="header">header</div>
+
+        {/* Mask */}
+        <div style={baseStyle} className={classNames('mask', {active: hover})} />
+
         {/* Preview: sprite cover */}
         {previewSprite && <div style={previewImgStyle} />}
       </div>
 
-      <div className="">
+      <div className="back">
         {/* Content */}
         {children}
       </div>
