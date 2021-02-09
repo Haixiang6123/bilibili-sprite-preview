@@ -8,8 +8,10 @@
   .front {
     // Header for progress bar
     .header {
+      z-index: 1;
       display: flex;
       justify-content: center;
+      position: absolute;
       top: 0;
       left: 0;
       width: 100%;
@@ -26,6 +28,10 @@
           background-color: white;
         }
       }
+    }
+    
+    .preview {
+      position: absolute;
     }
   }
 }

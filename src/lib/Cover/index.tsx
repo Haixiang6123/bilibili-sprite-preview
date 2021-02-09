@@ -1,19 +1,24 @@
 import * as React from 'react'
-import {useCallback, useRef, useState} from 'react'
+import {useCallback, useRef} from 'react'
 import './styles.scss'
 
 interface Props {
-  width?: number | string;
-  height?: number | string;
+  width: number;
+  height: number;
+  rows: number;
+  cols: number;
   previewSprite?: string;
 }
 
 const Cover: React.FC<Props> = (props) => {
-  const {children, width, height, previewSprite} = props
+  const {children, width, height, rows, cols, previewSprite} = props
 
-  const $cover = useRef<HTMLDivElement>(null)
+  const $cover = useRef<HTMLDivElement>(null);
+  const $progress = useRef<HTMLDivElement>(null);
+  const $preview = useRef<HTMLDivElement>(null);
 
-  const [progress, setProgress] = useState<number>(0)
+  // Calculate how many preview pictures in the sprite pic
+  const totalPicNum = rows * cols;
 
   const baseStyle = {
     width,
@@ -23,22 +28,25 @@ const Cover: React.FC<Props> = (props) => {
   const previewImgStyle = {
     ...baseStyle,
     backgroundImage: `url("${previewSprite}")`,
-    backgroundPosition: '0px 0px',
-    backgroundSize: 2030,
-  }
-
-  const progressStyle = {
-    width: `${progress}%`,
   }
 
   const onMouseMove = useCallback((e) => {
-    if (!$cover || !$cover.current) return;
+    if (!$cover.current || !$progress.current || !$preview.current) return;
 
+    // Update progress
     const rect = $cover.current.getBoundingClientRect()
+    const offsetX = Math.abs(e.pageX - rect.left); // The x offset of mouse with 'cover' div element
+    const percentage = offsetX / rect.width;
+    const progress = percentage * 100;
+    $progress.current.style.width = `${progress}%`;
 
-    const x = Math.abs(e.pageX - rect.left);
-
-    setProgress(x / rect.width * 100);
+    // Update preview pic
+    const curtPic = Math.round(totalPicNum * percentage); // Looking for the curt preview pic
+    const curtPicPos = { // Position of curt preview pic in the sprite pic
+      x: (curtPic % cols) * width,
+      y: (Math.floor(curtPic / cols)) * height
+    };
+    $preview.current.style.backgroundPosition = `-${curtPicPos.x}px -${curtPicPos.y}px`;
   }, [])
 
   return (
@@ -48,12 +56,12 @@ const Cover: React.FC<Props> = (props) => {
         {/* Header progress bar*/}
         <div className="header">
           <div className="track">
-            <div style={progressStyle} className="progress" />
+            <div ref={$progress} className="progress" />
           </div>
         </div>
 
         {/* Preview: sprite cover */}
-        {previewSprite && <div style={previewImgStyle}/>}
+        {previewSprite && <div ref={$preview} style={previewImgStyle} className="preview"/>}
       </div>
 
       {/* The elements that are in the back */}

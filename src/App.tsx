@@ -5,7 +5,7 @@ import sprite from 'assets/sprite.jpg';
 function App() {
   return (
     <div className="App">
-      <Cover width={203} height={127} previewSprite={sprite}>
+      <Cover width={160} height={90} rows={10} cols={10} previewSprite={sprite}>
         Hello
       </Cover>
     </div>
