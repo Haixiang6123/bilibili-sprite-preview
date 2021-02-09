@@ -27,16 +27,18 @@ const Cover: React.FC<Props> = (props) => {
     backgroundSize: 2030,
   }
 
-  const progressStyle = {}
+  const progressStyle = {
+    width: `${progress}%`,
+  }
 
   const onMouseMove = useCallback((e) => {
-    if (!$cover || !$cover.current) return
+    if (!$cover || !$cover.current) return;
 
     const rect = $cover.current.getBoundingClientRect()
 
     const x = Math.abs(e.pageX - rect.left);
 
-    setProgress(x / rect.width);
+    setProgress(x / rect.width * 100);
   }, [])
 
   return (
@@ -46,7 +48,7 @@ const Cover: React.FC<Props> = (props) => {
         {/* Header progress bar*/}
         <div className="header">
           <div className="track">
-            <div className="progress">{progress}</div>
+            <div style={progressStyle} className="progress" />
           </div>
         </div>
 
