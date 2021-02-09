@@ -1,26 +1,33 @@
+* {
+  box-sizing: border-box;
+}
+
 .cover {
   position: relative;
   
   .front {
+    // Header for progress bar
     .header {
+      display: flex;
+      align-items: center;
       position: absolute;
       top: 0;
       left: 0;
       width: 100%;
-      height: 100%;
-    }
-    
-    .mask {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0, 0, 0, 0.2);
-      opacity: 0;
+      height: 10%;
+      background-color: black;
+      padding: 2px;
       
-      &.active {
-        opacity: 0.5;
+      > .track {
+        width: 100%;
+        height: 2px;
+        background-color: #ddd;
+        
+        > .progress {
+          width: 100%;
+          height: 100%;
+          background-color: white;
+        }
       }
     }
   }

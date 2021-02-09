@@ -1,6 +1,5 @@
 import * as React from 'react'
-import classNames from 'classnames'
-import {useState} from 'react'
+import {useCallback, useRef, useState} from 'react'
 import './styles.scss'
 
 interface Props {
@@ -10,9 +9,11 @@ interface Props {
 }
 
 const Cover: React.FC<Props> = (props) => {
-  const {children, width, height, previewSprite} = props;
+  const {children, width, height, previewSprite} = props
 
-  const [hover, setHover] = useState<boolean>(false);
+  const $cover = useRef<HTMLDivElement>(null)
+
+  const [progress, setProgress] = useState<number>(0)
 
   const baseStyle = {
     width,
@@ -26,19 +27,34 @@ const Cover: React.FC<Props> = (props) => {
     backgroundSize: 2030,
   }
 
+  const progressStyle = {}
+
+  const onMouseMove = useCallback((e) => {
+    if (!$cover || !$cover.current) return
+
+    const rect = $cover.current.getBoundingClientRect()
+
+    const x = Math.abs(e.pageX - rect.left);
+
+    setProgress(x / rect.width);
+  }, [])
+
   return (
-    <div className="cover" onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)}>
+    <div ref={$cover} style={baseStyle} className="cover" onMouseMove={onMouseMove}>
+      {/* The elements that are in the front */}
       <div className="front">
         {/* Header progress bar*/}
-        <div className="header">header</div>
-
-        {/* Mask */}
-        <div style={baseStyle} className={classNames('mask', {active: hover})} />
+        <div className="header">
+          <div className="track">
+            <div className="progress">{progress}</div>
+          </div>
+        </div>
 
         {/* Preview: sprite cover */}
-        {previewSprite && <div style={previewImgStyle} />}
+        {previewSprite && <div style={previewImgStyle}/>}
       </div>
 
+      {/* The elements that are in the back */}
       <div className="back">
         {/* Content */}
         {children}
