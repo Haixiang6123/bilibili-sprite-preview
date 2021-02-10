@@ -2,6 +2,7 @@ import React from 'react'
 import SpritePreview from 'lib/SpritePreview'
 import sprite from 'assets/sprite.jpg'
 import content from 'assets/content.webp'
+import './styles.scss'
 
 function App() {
   const spriteOptions = {
@@ -14,14 +15,20 @@ function App() {
     <div style={{ position: 'absolute', right: 0, bottom: 0}}>Hello</div>
   )
 
+  const duration = (
+    <span className="duration">
+      08:00
+    </span>
+  )
+
   return (
     <div className="App">
       <SpritePreview width={160} height={90} spriteOptions={spriteOptions} cover={cover}>
-        <div style={{ position: 'absolute', height: '100%' }}>
+        <a href="https://www.bilibili.com/video/BV1cV411B7RY" target="_blank">
           <img style={{width: 160, height: 90}} src={content} alt="content"/>
 
-          <footer style={{ position: 'absolute', bottom: 0, right: 0 }}>10:54</footer>
-        </div>
+          <footer>{duration}</footer>
+        </a>
       </SpritePreview>
     </div>
   )
