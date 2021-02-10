@@ -17,7 +17,11 @@ function App() {
   return (
     <div className="App">
       <SpritePreview width={160} height={90} spriteOptions={spriteOptions} cover={cover}>
-        <img style={{width: 160, height: 90}} src={content} alt="content"/>
+        <div style={{ position: 'absolute', height: '100%' }}>
+          <img style={{width: 160, height: 90}} src={content} alt="content"/>
+
+          <footer style={{ position: 'absolute', bottom: 0, right: 0 }}>10:54</footer>
+        </div>
       </SpritePreview>
     </div>
   )
