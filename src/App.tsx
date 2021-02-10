@@ -6,7 +6,7 @@ import content from 'assets/content.webp';
 function App() {
   return (
     <div className="App">
-      <Cover width={160} height={90} rows={10} cols={10} previewSprite={sprite}>
+      <Cover width={160} height={90} rows={10} cols={10} sprite={sprite}>
         <img style={{ height: 90, width: 160 }} src={content} alt=""/>
       </Cover>
     </div>

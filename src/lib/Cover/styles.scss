@@ -2,11 +2,13 @@
   box-sizing: border-box;
 }
 
-.cover {
+.wrapper {
   position: relative;
   
-  .front {
+  .cover {
+    opacity: 0;
     transition: opacity 0.3s;
+  
     // Header for progress bar
     .header {
       z-index: 1;
@@ -31,7 +33,7 @@
       }
     }
     
-    .preview {
+    .sprite {
       position: absolute;
     }
   }

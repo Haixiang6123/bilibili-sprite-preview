@@ -7,11 +7,11 @@ interface Props {
   height: number;
   rows: number;
   cols: number;
-  previewSprite?: string;
+  sprite?: string;
 }
 
 const Cover: React.FC<Props> = (props) => {
-  const {children, width, height, rows, cols, previewSprite} = props
+  const {children, width, height, rows, cols, sprite} = props
 
   const $cover = useRef<HTMLDivElement>(null)
   const $front = useRef<HTMLDivElement>(null);
@@ -28,7 +28,7 @@ const Cover: React.FC<Props> = (props) => {
 
   const previewImgStyle = {
     ...baseStyle,
-    backgroundImage: `url("${previewSprite}")`,
+    backgroundImage: `url("${sprite}")`,
   }
 
   const onMouseEnter: MouseEventHandler = useCallback(() => {
@@ -65,12 +65,12 @@ const Cover: React.FC<Props> = (props) => {
 
   return (
     <div ref={$cover} style={baseStyle}
-         className="cover"
+         className="wrapper"
          onMouseEnter={onMouseEnter}
          onMouseLeave={onMouseLeave}
          onMouseMove={onMouseMove}>
       {/* The elements that are in the front */}
-      <div ref={$front} className="front">
+      <div ref={$front} className="cover">
         {/* Header progress bar*/}
         <div className="header">
           <div className="track">
@@ -79,11 +79,11 @@ const Cover: React.FC<Props> = (props) => {
         </div>
 
         {/* Preview: sprite cover */}
-        {previewSprite && <div ref={$preview} style={previewImgStyle} className="preview"/>}
+        {sprite && <div ref={$preview} style={previewImgStyle} className="sprite"/>}
       </div>
 
       {/* The elements that are in the back */}
-      <div className="back">
+      <div className="content">
         {/* Content */}
         {children}
       </div>
