@@ -2,16 +2,20 @@ import * as React from 'react'
 import {MouseEventHandler, useCallback, useRef} from 'react'
 import './styles.scss'
 
+interface SpriteOptions {
+  rows: number;
+  cols: number;
+  src: string;
+}
+
 interface Props {
   width: number;
   height: number;
-  rows: number;
-  cols: number;
-  sprite?: string;
+  spriteOptions: SpriteOptions
 }
 
 const Cover: React.FC<Props> = (props) => {
-  const {children, width, height, rows, cols, sprite} = props
+  const {children, width, height, spriteOptions} = props
 
   const $cover = useRef<HTMLDivElement>(null)
   const $front = useRef<HTMLDivElement>(null);
@@ -19,7 +23,7 @@ const Cover: React.FC<Props> = (props) => {
   const $preview = useRef<HTMLDivElement>(null)
 
   // Calculate how many preview pictures in the sprite pic
-  const totalPicNum = rows * cols
+  const totalPicNum = spriteOptions.rows * spriteOptions.cols
 
   const baseStyle = {
     width,
@@ -28,7 +32,7 @@ const Cover: React.FC<Props> = (props) => {
 
   const previewImgStyle = {
     ...baseStyle,
-    backgroundImage: `url("${sprite}")`,
+    backgroundImage: `url("${spriteOptions.src}")`,
   }
 
   const onMouseEnter: MouseEventHandler = useCallback(() => {
@@ -57,8 +61,8 @@ const Cover: React.FC<Props> = (props) => {
     // Update preview pic
     const curtPic = Math.round(totalPicNum * percentage) // Looking for the curt preview pic
     const curtPicPos = { // Position of curt preview pic in the sprite pic
-      x: (curtPic % cols) * width,
-      y: (Math.floor(curtPic / cols)) * height
+      x: (curtPic % spriteOptions.cols) * width,
+      y: (Math.floor(curtPic / spriteOptions.cols)) * height
     }
     $preview.current.style.backgroundPosition = `-${curtPicPos.x}px -${curtPicPos.y}px`
   }, [])
@@ -79,7 +83,7 @@ const Cover: React.FC<Props> = (props) => {
         </div>
 
         {/* Preview: sprite cover */}
-        {sprite && <div ref={$preview} style={previewImgStyle} className="sprite"/>}
+        <div ref={$preview} style={previewImgStyle} className="sprite"/>
       </div>
 
       {/* The elements that are in the back */}
