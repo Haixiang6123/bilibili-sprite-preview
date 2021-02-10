@@ -1,6 +1,7 @@
 import * as React from 'react'
 import {MouseEventHandler, useCallback, useRef} from 'react'
 import './styles.scss'
+import {getMouseXPercent, locateSpritePic} from './utils'
 
 interface SpriteOptions {
   rows: number;
@@ -36,6 +37,7 @@ const SpritePreview: React.FC<Props> = (props) => {
     backgroundImage: `url("${spriteOptions.src}")`,
   }
 
+  // Show cover and hide content
   const onMouseEnter: MouseEventHandler = useCallback(() => {
     if (!$cover.current || !$content.current) return
 
@@ -43,6 +45,7 @@ const SpritePreview: React.FC<Props> = (props) => {
     $content.current.style.opacity = '0'
   }, [])
 
+  // Show content and hide cover
   const onMouseLeave: MouseEventHandler = useCallback(() => {
     if (!$cover.current || !$content.current) return
 
@@ -50,22 +53,18 @@ const SpritePreview: React.FC<Props> = (props) => {
     $content.current.style.opacity = '1'
   }, [])
 
+  // Calculate progress and preview pic position of sprite pic
   const onMouseMove: MouseEventHandler = useCallback((e) => {
     if (!$wrapper.current || !$progress.current || !$preview.current) return
 
     // Update progress
-    const rect = $wrapper.current.getBoundingClientRect()
-    const offsetX = Math.abs(e.pageX - rect.left) // The x offset of mouse with 'cover' div element
-    const percentage = offsetX / rect.width
+    const percentage = getMouseXPercent($wrapper.current, e.pageX);
     const progress = percentage * 100
     $progress.current.style.width = `${progress}%`
 
     // Update preview pic
     const curtPic = Math.round(totalPicNum * percentage) // Looking for the curt preview pic
-    const curtPicPos = { // Position of curt preview pic in the sprite pic
-      x: (curtPic % spriteOptions.cols) * width,
-      y: (Math.floor(curtPic / spriteOptions.cols)) * height
-    }
+    const curtPicPos = locateSpritePic(curtPic, spriteOptions.cols, width, height)
     $preview.current.style.backgroundPosition = `-${curtPicPos.x}px -${curtPicPos.y}px`
   }, [])
 
