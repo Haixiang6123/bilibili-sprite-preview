@@ -14,6 +14,10 @@ function App() {
     src: sprite
   }
 
+  const cover = (
+    <span className="tag">投稿视频</span>
+  )
+
   const duration = (
     <span className="duration">
       08:00
@@ -22,7 +26,7 @@ function App() {
 
   return (
     <div className="App">
-      <SpritePreview width={width} height={height} spriteOptions={spriteOptions}>
+      <SpritePreview width={width} height={height} spriteOptions={spriteOptions} cover={cover}>
         <a href="https://www.bilibili.com/video/BV1cV411B7RY" target="_blank" rel="noreferrer">
           <img style={{width, height}} src={content} alt="content"/>
 
