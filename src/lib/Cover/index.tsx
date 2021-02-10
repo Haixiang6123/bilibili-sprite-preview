@@ -17,10 +17,11 @@ interface Props {
 const SpritePreview: React.FC<Props> = (props) => {
   const {children, width, height, spriteOptions} = props
 
-  const $cover = useRef<HTMLDivElement>(null)
-  const $front = useRef<HTMLDivElement>(null);
+  const $wrapper = useRef<HTMLDivElement>(null)
+  const $cover = useRef<HTMLDivElement>(null);
   const $progress = useRef<HTMLDivElement>(null)
   const $preview = useRef<HTMLDivElement>(null)
+  const $content = useRef<HTMLDivElement>(null)
 
   // Calculate how many preview pictures in the sprite pic
   const totalPicNum = spriteOptions.rows * spriteOptions.cols
@@ -36,23 +37,24 @@ const SpritePreview: React.FC<Props> = (props) => {
   }
 
   const onMouseEnter: MouseEventHandler = useCallback(() => {
-    if (!$front.current) return
+    if (!$cover.current || !$content.current) return
 
-    // Show front
-    $front.current.style.opacity = '1'
+    $cover.current.style.opacity = '1'
+    $content.current.style.opacity = '0'
   }, [])
 
   const onMouseLeave: MouseEventHandler = useCallback(() => {
-    if (!$front.current) return
+    if (!$cover.current || !$content.current) return
 
-    $front.current.style.opacity = '0'
+    $cover.current.style.opacity = '0'
+    $content.current.style.opacity = '1'
   }, [])
 
   const onMouseMove: MouseEventHandler = useCallback((e) => {
-    if (!$cover.current || !$progress.current || !$preview.current) return
+    if (!$wrapper.current || !$progress.current || !$preview.current) return
 
     // Update progress
-    const rect = $cover.current.getBoundingClientRect()
+    const rect = $wrapper.current.getBoundingClientRect()
     const offsetX = Math.abs(e.pageX - rect.left) // The x offset of mouse with 'cover' div element
     const percentage = offsetX / rect.width
     const progress = percentage * 100
@@ -68,13 +70,13 @@ const SpritePreview: React.FC<Props> = (props) => {
   }, [])
 
   return (
-    <div ref={$cover} style={baseStyle}
+    <div ref={$wrapper} style={baseStyle}
          className="wrapper"
          onMouseEnter={onMouseEnter}
          onMouseLeave={onMouseLeave}
          onMouseMove={onMouseMove}>
       {/* The elements that are in the front */}
-      <div ref={$front} className="cover">
+      <div ref={$cover} className="cover">
         {/* Header progress bar*/}
         <div className="header">
           <div className="track">
@@ -87,7 +89,7 @@ const SpritePreview: React.FC<Props> = (props) => {
       </div>
 
       {/* The elements that are in the back */}
-      <div className="content">
+      <div ref={$content} className="content">
         {/* Content */}
         {children}
       </div>
