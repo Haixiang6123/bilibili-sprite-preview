@@ -5,8 +5,8 @@ import content from 'assets/content.webp'
 import './styles.scss'
 
 function App() {
-  const width = 160
-  const height = 90
+  const width = 160 * 1.3
+  const height = 90 * 1.3
 
   const spriteOptions = {
     rows: 10,

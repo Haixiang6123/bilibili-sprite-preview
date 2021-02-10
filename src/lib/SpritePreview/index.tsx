@@ -37,6 +37,7 @@ const SpritePreview: React.FC<Props> = (props) => {
   const previewImgStyle = {
     ...baseStyle,
     backgroundImage: `url("${spriteOptions.src}")`,
+    backgroundSize: `${width * spriteOptions.cols}px ${height * spriteOptions.rows}px`,
   }
 
   // Show cover and hide content
