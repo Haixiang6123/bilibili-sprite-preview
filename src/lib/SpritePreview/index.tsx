@@ -73,7 +73,7 @@ const SpritePreview: React.FC<Props> = (props) => {
       y: (Math.floor(nthPic / spriteOptions.cols)) * height
     }
     previewElement.style.backgroundPosition = `-${curtPicPos.x}px -${curtPicPos.y}px`
-  }, [spriteOptions])
+  }, [height, spriteOptions.cols, totalPicNum, width])
 
   // Calculate progress and preview pic position of sprite pic
   const onMouseMove: MouseEventHandler<HTMLDivElement> = useCallback((e) => {
@@ -82,7 +82,7 @@ const SpritePreview: React.FC<Props> = (props) => {
     const percentage = updateProgress(e, $track.current, $progress.current)
 
     updatePreviewPic(percentage, $preview.current)
-  }, [])
+  }, [updatePreviewPic, updateProgress])
 
   return (
     <div ref={$wrapper} style={baseStyle}

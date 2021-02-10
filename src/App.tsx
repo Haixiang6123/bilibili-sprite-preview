@@ -24,7 +24,7 @@ function App() {
   return (
     <div className="App">
       <SpritePreview width={160} height={90} spriteOptions={spriteOptions} cover={cover}>
-        <a href="https://www.bilibili.com/video/BV1cV411B7RY" target="_blank">
+        <a href="https://www.bilibili.com/video/BV1cV411B7RY" target="_blank" rel="noreferrer">
           <img style={{width: 160, height: 90}} src={content} alt="content"/>
 
           <footer>{duration}</footer>
