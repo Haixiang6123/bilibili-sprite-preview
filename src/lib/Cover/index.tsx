@@ -1,5 +1,5 @@
 import * as React from 'react'
-import {MouseEventHandler, MouseEvent, useCallback, useRef} from 'react'
+import {MouseEventHandler, MouseEvent, useCallback, useRef, ReactNode} from 'react'
 import './styles.scss'
 import {within} from './utils'
 
@@ -12,11 +12,12 @@ interface SpriteOptions {
 interface Props {
   width: number;
   height: number;
+  cover?: ReactNode | string;
   spriteOptions: SpriteOptions
 }
 
 const SpritePreview: React.FC<Props> = (props) => {
-  const {children, width, height, spriteOptions} = props
+  const {children, width, height, spriteOptions, cover} = props
 
   const $wrapper = useRef<HTMLDivElement>(null)
   const $cover = useRef<HTMLDivElement>(null)
@@ -57,12 +58,12 @@ const SpritePreview: React.FC<Props> = (props) => {
   // Update progress when mouse is hover
   const updateProgress = useCallback((e: MouseEvent, trackElement: HTMLDivElement, progressElement: HTMLDivElement) => {
     const trackRect = trackElement.getBoundingClientRect()
-    const percentage = (e.pageX - trackRect.left)/ trackRect.width
+    const percentage = (e.pageX - trackRect.left) / trackRect.width
     const progress = within(percentage * 100, 0, 100)
     progressElement.style.width = `${progress}%`
 
-    return percentage;
-  }, []);
+    return percentage
+  }, [])
 
   // Update preview pic
   const updatePreviewPic = useCallback((percentage: number, previewElement: HTMLDivElement) => {
@@ -72,7 +73,7 @@ const SpritePreview: React.FC<Props> = (props) => {
       y: (Math.floor(nthPic / spriteOptions.cols)) * height
     }
     previewElement.style.backgroundPosition = `-${curtPicPos.x}px -${curtPicPos.y}px`
-  }, [spriteOptions]);
+  }, [spriteOptions])
 
   // Calculate progress and preview pic position of sprite pic
   const onMouseMove: MouseEventHandler<HTMLDivElement> = useCallback((e) => {
@@ -80,7 +81,7 @@ const SpritePreview: React.FC<Props> = (props) => {
 
     const percentage = updateProgress(e, $track.current, $progress.current)
 
-    updatePreviewPic(percentage, $preview.current);
+    updatePreviewPic(percentage, $preview.current)
   }, [])
 
   return (
@@ -100,6 +101,8 @@ const SpritePreview: React.FC<Props> = (props) => {
 
         {/* Preview: sprite cover */}
         <div ref={$preview} style={previewImgStyle} className="sprite"/>
+
+        {cover && <div className="custom-cover">{cover}</div>}
       </div>
 
       {/* The elements that are in the back */}

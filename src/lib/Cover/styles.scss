@@ -38,6 +38,13 @@
     .sprite {
       position: absolute;
     }
+    
+    .custom-cover {
+      position: absolute;
+      top: 6px;
+      bottom: 0;
+      width: 100%;
+    }
   }
   
   .content {
