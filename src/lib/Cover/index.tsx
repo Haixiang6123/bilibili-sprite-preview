@@ -1,7 +1,7 @@
 import * as React from 'react'
-import {MouseEventHandler, useCallback, useRef} from 'react'
+import {MouseEventHandler, MouseEvent, useCallback, useRef} from 'react'
 import './styles.scss'
-import {getMouseXPercent, locateSpritePic} from './utils'
+import {within} from './utils'
 
 interface SpriteOptions {
   rows: number;
@@ -19,7 +19,8 @@ const SpritePreview: React.FC<Props> = (props) => {
   const {children, width, height, spriteOptions} = props
 
   const $wrapper = useRef<HTMLDivElement>(null)
-  const $cover = useRef<HTMLDivElement>(null);
+  const $cover = useRef<HTMLDivElement>(null)
+  const $track = useRef<HTMLDivElement>(null)
   const $progress = useRef<HTMLDivElement>(null)
   const $preview = useRef<HTMLDivElement>(null)
   const $content = useRef<HTMLDivElement>(null)
@@ -53,19 +54,33 @@ const SpritePreview: React.FC<Props> = (props) => {
     $content.current.style.opacity = '1'
   }, [])
 
+  // Update progress when mouse is hover
+  const updateProgress = useCallback((e: MouseEvent, trackElement: HTMLDivElement, progressElement: HTMLDivElement) => {
+    const trackRect = trackElement.getBoundingClientRect()
+    const percentage = (e.pageX - trackRect.left)/ trackRect.width
+    const progress = within(percentage * 100, 0, 100)
+    progressElement.style.width = `${progress}%`
+
+    return percentage;
+  }, []);
+
+  // Update preview pic
+  const updatePreviewPic = useCallback((percentage: number, previewElement: HTMLDivElement) => {
+    const nthPic = Math.round(totalPicNum * percentage) // Looking for the curt preview pic
+    const curtPicPos = {
+      x: (nthPic % spriteOptions.cols) * width,
+      y: (Math.floor(nthPic / spriteOptions.cols)) * height
+    }
+    previewElement.style.backgroundPosition = `-${curtPicPos.x}px -${curtPicPos.y}px`
+  }, [spriteOptions]);
+
   // Calculate progress and preview pic position of sprite pic
-  const onMouseMove: MouseEventHandler = useCallback((e) => {
-    if (!$wrapper.current || !$progress.current || !$preview.current) return
+  const onMouseMove: MouseEventHandler<HTMLDivElement> = useCallback((e) => {
+    if (!$wrapper.current || !$track.current || !$progress.current || !$preview.current) return
 
-    // Update progress
-    const percentage = getMouseXPercent($wrapper.current, e.pageX);
-    const progress = percentage * 100
-    $progress.current.style.width = `${progress}%`
+    const percentage = updateProgress(e, $track.current, $progress.current)
 
-    // Update preview pic
-    const curtPic = Math.round(totalPicNum * percentage) // Looking for the curt preview pic
-    const curtPicPos = locateSpritePic(curtPic, spriteOptions.cols, width, height)
-    $preview.current.style.backgroundPosition = `-${curtPicPos.x}px -${curtPicPos.y}px`
+    updatePreviewPic(percentage, $preview.current);
   }, [])
 
   return (
@@ -78,7 +93,7 @@ const SpritePreview: React.FC<Props> = (props) => {
       <div ref={$cover} className="cover">
         {/* Header progress bar*/}
         <div className="header">
-          <div className="track">
+          <div ref={$track} className="track">
             <div ref={$progress} className="progress"/>
           </div>
         </div>
