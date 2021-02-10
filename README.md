@@ -1,2 +1,2 @@
-# react-preview-cover
-Hover 时可提前预览的 React 组件
+# bilibili-sprite-preview
+Bilibili 的组件，Hover 时可以提前预览视频里的截图

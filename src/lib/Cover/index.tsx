@@ -14,7 +14,7 @@ interface Props {
   spriteOptions: SpriteOptions
 }
 
-const Cover: React.FC<Props> = (props) => {
+const SpritePreview: React.FC<Props> = (props) => {
   const {children, width, height, spriteOptions} = props
 
   const $cover = useRef<HTMLDivElement>(null)
@@ -95,4 +95,4 @@ const Cover: React.FC<Props> = (props) => {
   )
 }
 
-export default Cover
+export default SpritePreview
