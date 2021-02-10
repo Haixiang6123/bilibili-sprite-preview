@@ -5,15 +5,14 @@ import content from 'assets/content.webp'
 import './styles.scss'
 
 function App() {
+  const width = 160
+  const height = 90
+
   const spriteOptions = {
     rows: 10,
     cols: 10,
     src: sprite
   }
-
-  const cover = (
-    <div style={{ position: 'absolute', right: 0, bottom: 0}}>Hello</div>
-  )
 
   const duration = (
     <span className="duration">
@@ -23,9 +22,9 @@ function App() {
 
   return (
     <div className="App">
-      <SpritePreview width={160} height={90} spriteOptions={spriteOptions} cover={cover}>
+      <SpritePreview width={width} height={height} spriteOptions={spriteOptions}>
         <a href="https://www.bilibili.com/video/BV1cV411B7RY" target="_blank" rel="noreferrer">
-          <img style={{width: 160, height: 90}} src={content} alt="content"/>
+          <img style={{width, height}} src={content} alt="content"/>
 
           <footer>{duration}</footer>
         </a>
