@@ -1,5 +1,5 @@
 import React from 'react'
-import SpritePreview from 'lib/Cover'
+import SpritePreview from 'lib/SpritePreview'
 import sprite from 'assets/sprite.jpg'
 import content from 'assets/content.webp'
 
