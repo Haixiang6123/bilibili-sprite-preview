@@ -6,6 +6,7 @@
   position: relative;
   
   .front {
+    transition: opacity 0.3s;
     // Header for progress bar
     .header {
       z-index: 1;
